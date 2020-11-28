@@ -1,0 +1,72 @@
+#include "VulkanPhysicalDevice.h"
+#include "Log.h"
+
+namespace MVK
+{
+	std::vector<std::shared_ptr<VulkanPhysicalDevice>> VulkanPhysicalDevice::GetAllPhysicalDevice(std::shared_ptr<VulkanInstance> instance)
+	{
+		std::vector<std::shared_ptr<VulkanPhysicalDevice>> ret;
+		uint32_t deviceCount = 0;
+		vkEnumeratePhysicalDevices(instance->GetHandle(), &deviceCount, nullptr);
+		std::vector<VkPhysicalDevice> devices(deviceCount);
+		if (vkEnumeratePhysicalDevices(instance->GetHandle(), &deviceCount, devices.data()) != VK_SUCCESS)
+		{
+			CORE_ERROR("ERROR::failed to enumerate device");
+			exit(EXIT_FAILURE);
+		}
+
+		for (uint32_t i = 0; i < deviceCount; i++)
+		{
+			std::shared_ptr < VulkanPhysicalDevice> physicalDevice = std::make_shared<VulkanPhysicalDevice>();
+			physicalDevice->Initialize(instance, devices[i]);
+			ret.push_back(physicalDevice);
+		}
+		return ret;
+	}
+
+	void VulkanPhysicalDevice::Initialize(const std::shared_ptr<VulkanInstance> instance, VkPhysicalDevice physicalDevice)
+	{
+		m_PhysicalDevice = physicalDevice;
+
+		vkGetPhysicalDeviceProperties(physicalDevice, &m_PhysicalDeviceProperties);
+		vkGetPhysicalDeviceFeatures(physicalDevice, &m_PhysicalDeviceFeatures);
+		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &m_PhysicalDeviceMemoryProperties);
+	}
+
+	VkFormat VulkanPhysicalDevice::FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+	{
+		for (VkFormat format : candidates)
+		{
+			VkFormatProperties props;
+			vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice, format, &props);
+			if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+			{
+				return format;
+			}
+			else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+			{
+				return format;
+			}
+		}
+	}
+
+	VkFormat VulkanPhysicalDevice::FindDepthFormat()
+	{
+		return FindSupportedFormat(
+			{ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+		);
+	}
+
+	uint32_t VulkanPhysicalDevice::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags propeyties)
+	{
+		for (uint32_t i = 0; i < m_PhysicalDeviceMemoryProperties.memoryTypeCount; i++)
+		{
+			if ((typeFilter & (1 << i)) && (m_PhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & propeyties) == propeyties)
+			{
+				return i;
+			}
+		}
+	}
+}
