@@ -29,9 +29,6 @@
     <ClCompile Include="src\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShaderModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Surface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -128,6 +125,12 @@
     <ClCompile Include="src\VulkanImage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\VulkanShaderModule.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanFrameBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppBase.h">
@@ -140,9 +143,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Log.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ShaderModule.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Surface.h">
@@ -224,6 +224,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\VulkanImageView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanShaderModule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanFrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

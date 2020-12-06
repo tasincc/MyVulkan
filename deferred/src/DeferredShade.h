@@ -7,6 +7,7 @@
 #include "VulkanImage.h"
 #include "VulkanImageView.h"
 #include "VulkanPipeline.h"
+#include "VulkanFrameBuffer.h"
 
 #include "Config.h"
 #include "Scene.h"
@@ -16,12 +17,10 @@
 class Application : public AppBase
 {
 private:
-	std::shared_ptr<MVK::VulkanCommandPool> m_command_pool;
-	std::shared_ptr<MVK::VulkanRenderPass> m_render_pass;
-
-	std::shared_ptr<MVK::VulkanDescriptorSetLayout> m_descriptor_set_layout;
-	std::shared_ptr<MVK::VulkanPipelineLayout> m_pipeline_layout;
-	std::shared_ptr<MVK::VulkanGraphicPipeline> m_graphic_pipeline;
+	std::shared_ptr<MVK::VulkanCommandPool> mCommandPool;
+	std::shared_ptr<MVK::VulkanRenderPass> mRenderPass;
+	std::shared_ptr<MVK::VulkanGraphicPipeline> mGraphicPipeline;
+	std::vector<std::shared_ptr<MVK::VulkanFramebuffer>> mFrameBuffer;
 
 	std::shared_ptr<MVK::VulkanQueue> mGraphicQueue{ nullptr };
 	std::shared_ptr<MVK::VulkanPresentQueue> mPresentQueue{ nullptr };
@@ -30,7 +29,6 @@ private:
 	Scene scene;
 protected:
 	void craetRenderPass();
-	//void prepare();
 	void createPipeline();
 public:
 	Application();

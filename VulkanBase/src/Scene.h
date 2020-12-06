@@ -61,6 +61,8 @@ public:
 	bool Initialize(std::shared_ptr<MVK::VulkanQueue> queuem, const char* filename);
 	const std::shared_ptr<MVK::VulkanDescriptorSetLayout>& GetDescriptorSetLayout() const { return mDescriptorSetLayout; }
 	const std::shared_ptr<MVK::VulkanDescriptorSet>& GetDescriptorSet() const { return mDescriptorSet; }
+	std::vector<VkVertexInputBindingDescription> GetVertexInputBindingDescription() const;
+	std::vector<VkVertexInputAttributeDescription> GetVertexInputAttributeDescription() const;
 };
 
 #endif

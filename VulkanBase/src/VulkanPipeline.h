@@ -1,7 +1,7 @@
 #ifndef VULKAN_GRAPHIC_PIPELINE_H
 #define VULKAN_GRAPHIC_PIPELINE_H
 
-#include "ShaderModule.h"
+#include "VulkanShaderModule.h"
 #include "DeviceObjectBase.h"
 #include "VulkanPipelineLayout.h"
 #include "VulkanRenderPass.h"

@@ -114,7 +114,7 @@ bool Scene::load_meshs(const char* filename, const char* dir, std::vector <Mesh>
 
 		if (!texture_name.empty() && textureNameMap.find(texture_name) == textureNameMap.end())
 		{
-			uint32_t index = textureNameMap.size();
+			uint32_t index = static_cast<uint32_t>(textureNameMap.size());
 			textureNameMap[texture_name] = index;
 		}
 		else if (texture_name.empty())
@@ -392,4 +392,30 @@ bool Scene::Initialize(std::shared_ptr<MVK::VulkanQueue> graphicQueue, const cha
 	CORE_INFO("success load scene : {}", file_name);
 
 	return true;
+}
+
+std::vector<VkVertexInputBindingDescription> Scene::GetVertexInputBindingDescription() const
+{
+	std::vector<VkVertexInputBindingDescription> ret(1);
+	ret[0].binding = 0;
+	ret[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	ret[0].stride = sizeof(Vertex);
+	return ret;
+}
+
+std::vector<VkVertexInputAttributeDescription> Scene::GetVertexInputAttributeDescription() const
+{
+	std::vector<VkVertexInputAttributeDescription> ret(2);
+
+	ret[0].binding = 0;
+	ret[0].location = 0;
+	ret[0].offset = offsetof(Vertex, mPosition);
+	ret[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+
+	ret[1].binding = 0;
+	ret[1].location = 1;
+	ret[1].offset = offsetof(Vertex, mTexCoord);
+	ret[1].format = VK_FORMAT_R32G32_SFLOAT;
+
+	return ret;
 }

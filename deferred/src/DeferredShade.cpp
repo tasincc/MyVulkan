@@ -20,14 +20,20 @@ void Application::Initialize()
 	mTransferQueue = MVK::VulkanQueue::Create(mVulkanDevice, VK_QUEUE_TRANSFER_BIT);
 	mPresentQueue = MVK::VulkanPresentQueue::Create(mVulkanDevice);
 
-	//scene.Initialize(mGraphicQueue, "C://Users//41132//Desktop//Opengl//Learn//resources//objects//sponza//sponza.obj");
+	scene.Initialize(mGraphicQueue, "C://Users//41132//Desktop//Opengl//Learn//resources//objects//sponza//sponza.obj");
 
 	//renderPass
 	craetRenderPass();
 
 	//pipeline
+	createPipeline();
 
 	//
+	mFrameBuffer.resize(mSwapchainImageViews.size());
+	for (uint32_t i = 0; i < mSwapchainImageViews.size(); i++)
+	{
+		mFrameBuffer[i] = MVK::VulkanFramebuffer::Create(mRenderPass, { mSwapchainImageViews[i] ,mDepthView }, mSwapChain->GetExtent(), 1);
+	}
 }
 
 
@@ -74,9 +80,9 @@ void Application::craetRenderPass()
 	std::array<VkSubpassDependency, 2> dependencies;
 	dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
 	dependencies[0].dstSubpass = 0;
-	dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT ;
+	dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 	dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-	dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ;
+	dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 	dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
@@ -97,19 +103,107 @@ void Application::craetRenderPass()
 	createInfo.subpassCount = 1;
 	createInfo.pSubpasses = &subPass;
 
-	m_render_pass = MVK::VulkanRenderPass::Create(mVulkanDevice, createInfo);
+	mRenderPass = MVK::VulkanRenderPass::Create(mVulkanDevice, createInfo);
 }
 
 void Application::createPipeline()
 {
-	VkDescriptorSetLayout test = scene.GetDescriptorSetLayout()->GetHandle();
-
-	VkGraphicsPipelineCreateInfo creat_info{};
-	creat_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	creat_info.renderPass = m_render_pass->GetHandle();
-
 	VkPipelineInputAssemblyStateCreateInfo input_assembly_state{};
 	input_assembly_state.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	input_assembly_state.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	input_assembly_state.primitiveRestartEnable = VK_FALSE;
+
+	std::shared_ptr<MVK::VulkanShaderModule> vertexShader = MVK::VulkanShaderModule::Create(mVulkanDevice, "../shader/deferred/deferred.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+	std::shared_ptr<MVK::VulkanShaderModule> fragShader = MVK::VulkanShaderModule::Create(mVulkanDevice, "../shader/deferred/deferred.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+	std::array<VkPipelineShaderStageCreateInfo, 2> shaderStageArray = { vertexShader->GetShaderStageCreateInfo("main"), fragShader->GetShaderStageCreateInfo("main") };
+
+	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
+	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	auto attributeDescriptions = scene.GetVertexInputAttributeDescription();
+	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+	auto bindingDescriptions = scene.GetVertexInputBindingDescription();
+	vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
+	vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
+
+	VkPipelineInputAssemblyStateCreateInfo inputAssemblyCI{};
+	inputAssemblyCI.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	inputAssemblyCI.primitiveRestartEnable = VK_FALSE;
+	inputAssemblyCI.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+	//**************************************************************************
+	VkViewport viewPort{};
+	viewPort.x = 0.0f;
+	viewPort.y = 0.0f;
+	viewPort.width = mSwapChain->GetExtent().width;
+	viewPort.height = mSwapChain->GetExtent().height;
+	viewPort.minDepth = 0.0f;
+	viewPort.maxDepth = 1.0f;
+
+	VkRect2D scissor{};
+	scissor.offset = { 0,0 };
+	scissor.extent = mSwapChain->GetExtent();
+
+	VkPipelineViewportStateCreateInfo pipelineViewPortCI{};
+	pipelineViewPortCI.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	pipelineViewPortCI.viewportCount = 1;
+	pipelineViewPortCI.pViewports = &viewPort;
+	pipelineViewPortCI.scissorCount = 1;
+	pipelineViewPortCI.pScissors = &scissor;
+
+	//**************************************************************************
+
+	VkPipelineRasterizationStateCreateInfo rasterizationCI{};
+	rasterizationCI.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizationCI.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizationCI.lineWidth = 1.0f;
+	rasterizationCI.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizationCI.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizationCI.depthClampEnable = VK_FALSE;
+	rasterizationCI.depthBiasClamp = VK_FALSE;
+	rasterizationCI.rasterizerDiscardEnable = VK_FALSE;
+
+	VkPipelineMultisampleStateCreateInfo multisampleStateCI{};
+	multisampleStateCI.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	multisampleStateCI.sampleShadingEnable = VK_FALSE;
+	multisampleStateCI.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+	VkPipelineDepthStencilStateCreateInfo depthStencilCI{};
+	depthStencilCI.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencilCI.depthTestEnable = VK_TRUE;
+	depthStencilCI.depthWriteEnable = VK_TRUE;
+	depthStencilCI.depthCompareOp = VK_COMPARE_OP_LESS;
+	depthStencilCI.depthBoundsTestEnable = VK_FALSE;
+	depthStencilCI.stencilTestEnable = VK_FALSE;
+
+	//*************************************************************************************
+	VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+	colorBlendAttachment.blendEnable = VK_FALSE;
+	colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+
+	VkPipelineColorBlendStateCreateInfo colorBlendCI{};
+	colorBlendCI.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	colorBlendCI.attachmentCount = 1;
+	colorBlendCI.pAttachments = &colorBlendAttachment;
+	//*************************************************************************************
+
+	std::shared_ptr<MVK::VulkanPipelineLayout> pipelienLayout = MVK::VulkanPipelineLayout::Create(mVulkanDevice, { scene.GetDescriptorSetLayout() });
+
+	VkGraphicsPipelineCreateInfo pipelineCI{};
+	pipelineCI.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineCI.renderPass = mRenderPass->GetHandle();
+	pipelineCI.subpass = 0;
+	pipelineCI.pStages = shaderStageArray.data();
+	pipelineCI.stageCount = static_cast<uint32_t>(shaderStageArray.size());
+	pipelineCI.pVertexInputState = &vertexInputInfo;
+	pipelineCI.pInputAssemblyState = &inputAssemblyCI;
+	pipelineCI.pViewportState = &pipelineViewPortCI;
+	pipelineCI.pRasterizationState = &rasterizationCI;
+	pipelineCI.pMultisampleState = &multisampleStateCI;
+	pipelineCI.pDepthStencilState = &depthStencilCI;
+	pipelineCI.pColorBlendState = &colorBlendCI;
+	pipelineCI.layout = pipelienLayout->GetHandle();
+	pipelineCI.basePipelineHandle = VK_NULL_HANDLE;
+
+	mGraphicPipeline = MVK::VulkanGraphicPipeline::Create(pipelienLayout, mRenderPass, pipelineCI);
 }

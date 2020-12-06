@@ -161,7 +161,7 @@
     <ClCompile Include="src\VulkanImageView.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Scene.cpp" />
-    <ClCompile Include="src\ShaderModule.cpp" />
+    <ClCompile Include="src\VulkanShaderModule.cpp" />
     <ClCompile Include="src\Surface.cpp" />
     <ClCompile Include="src\SwapChainImage.cpp" />
     <ClCompile Include="src\VulkanBuffer.cpp" />
@@ -181,6 +181,7 @@
     <ClCompile Include="src\VulkanDescriptorPool.cpp" />
     <ClCompile Include="src\VulkanFence.cpp" />
     <ClCompile Include="src\UIRenderer.cpp" />
+    <ClCompile Include="src\VulkanFrameBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
@@ -194,7 +195,7 @@
     <ClInclude Include="src\VulkanImageView.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Scene.h" />
-    <ClInclude Include="src\ShaderModule.h" />
+    <ClInclude Include="src\VulkanShaderModule.h" />
     <ClInclude Include="src\Surface.h" />
     <ClInclude Include="src\SwapChainImage.h" />
     <ClInclude Include="src\VulkanBuffer.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="src\VulkanDescriptorPool.h" />
     <ClInclude Include="src\VulkanFence.h" />
     <ClInclude Include="src\UIRenderer.h" />
+    <ClInclude Include="src\VulkanFrameBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
