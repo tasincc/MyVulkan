@@ -5,17 +5,17 @@ namespace MVK
 {
 	VulkanPipelineLayout::~VulkanPipelineLayout()
 	{
-		if (m_pipeline_layout)
+		if (mPipelineLayout)
 		{
-			vkDestroyPipelineLayout(m_device_ptr->GetHandle(), m_pipeline_layout, nullptr);
+			vkDestroyPipelineLayout(mDevicePtr->GetHandle(), mPipelineLayout, nullptr);
 		}
 	}
 
-	std::shared_ptr<VulkanPipelineLayout> VulkanPipelineLayout::CreatePipelineLayout(std::shared_ptr<VulkanDevice> device, std::vector<std::shared_ptr<VulkanDescriptorSetLayout>> descriptorlayouts)
+	std::shared_ptr<VulkanPipelineLayout> VulkanPipelineLayout::Create(std::shared_ptr<VulkanDevice> device, std::vector<std::shared_ptr<VulkanDescriptorSetLayout>> descriptorlayouts)
 	{
 		std::shared_ptr<VulkanPipelineLayout> ret = std::make_shared<VulkanPipelineLayout>();
-		ret->m_device_ptr = device;
-		ret->m_descriptor_layout_ptrs = descriptorlayouts;
+		ret->mDevicePtr = device;
+		ret->mDescriptorLayoutPtrs = descriptorlayouts;
 
 		std::vector<VkDescriptorSetLayout> descriptorSetLayoutsHandle(descriptorlayouts.size());
 		for (uint32_t i = 0; i < static_cast<uint32_t>(descriptorlayouts.size()); i++)
@@ -28,7 +28,7 @@ namespace MVK
 		createInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayoutsHandle.size());
 		createInfo.pSetLayouts = descriptorSetLayoutsHandle.data();
 
-		VkResult result = vkCreatePipelineLayout(device->GetHandle(), &createInfo, nullptr, &ret->m_pipeline_layout);
+		VkResult result = vkCreatePipelineLayout(device->GetHandle(), &createInfo, nullptr, &ret->mPipelineLayout);
 		if (result != VK_SUCCESS)
 		{
 			CORE_ERROR("failed to create pipeline layout");

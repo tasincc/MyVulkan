@@ -11,13 +11,13 @@ namespace MVK
 	class VulkanRenderPass :public DeviceObjectBase
 	{
 	private:
-		VkRenderPass m_render_pass{ nullptr };
-		std::shared_ptr<VulkanDevice> m_device{ nullptr };
+		VkRenderPass mRenderPass{ nullptr };
+		std::shared_ptr<VulkanDevice> mDevice{ nullptr };
 	public:
 		~VulkanRenderPass();
-		VkRenderPass GetHandle() const { return m_render_pass; }
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return m_device; }
-		static std::shared_ptr<VulkanRenderPass> CreateRenderPass(const std::shared_ptr<VulkanDevice> device, const VkRenderPassCreateInfo& createInfo);
+		VkRenderPass GetHandle() const { return mRenderPass; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevice; }
+		static std::shared_ptr<VulkanRenderPass> Create(const std::shared_ptr<VulkanDevice>& device, const VkRenderPassCreateInfo& createInfo);
 	};
 }
 

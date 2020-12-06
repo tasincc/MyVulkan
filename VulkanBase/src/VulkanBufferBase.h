@@ -10,8 +10,11 @@ namespace MVK
 	class VulkanBufferBase :public DeviceObjectBase
 	{
 	protected:
-		VkBuffer m_buffer{ nullptr };
-		VkDeviceSize m_size{ 0 };
+		VkBuffer mBuffer{ nullptr };
+		VkDeviceSize mSize{ 0 };
+	public:
+		VkBuffer GetHandle() const { return mBuffer; }
+		VkDeviceSize GetSize() const { return mSize; }
 	};
 }
 

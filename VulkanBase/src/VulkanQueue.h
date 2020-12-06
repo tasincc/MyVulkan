@@ -9,16 +9,25 @@ namespace MVK
 {
 	class VulkanQueue :public DeviceObjectBase
 	{
-	private:
-		VkQueue m_queue{ nullptr };
-		uint32_t m_familyIndex;
-		std::shared_ptr<VulkanDevice> m_device;
+	protected:
+		VkQueue mQueue{ nullptr };
+		uint32_t mFamilyIndex;
+		std::shared_ptr<VulkanDevice> mDevice;
 	public:
-		~VulkanQueue();
-		static std::shared_ptr<VulkanQueue> createVulkanQueue(const std::shared_ptr<VulkanDevice> device, uint32_t familyIndex);
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return m_device; }
-		VkQueue GetHandle() const { return m_queue; }
-		uint32_t GetFamilyIndex() { return m_familyIndex; }
+		static std::shared_ptr<VulkanQueue> Create(const std::shared_ptr<VulkanDevice>& device, VkQueueFlags m_requestQueue);
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevice; }
+		VkQueue GetHandle() const { return mQueue; }
+		uint32_t GetFamilyIndex() const { return mFamilyIndex; }
+	};
+
+
+	class VulkanPresentQueue : public VulkanQueue
+	{
+	private:
+		std::shared_ptr<Surface> m_surface;
+	public:
+		const std::shared_ptr<Surface>& GetSufacePtr() { return m_surface; }
+		static std::shared_ptr<VulkanPresentQueue> Create(const std::shared_ptr<VulkanDevice>& device);
 	};
 }
 

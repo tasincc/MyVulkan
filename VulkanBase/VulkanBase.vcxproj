@@ -101,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependency;$(SolutionDir)dependency\spdlog-1.x\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependency;$(SolutionDir)dependency\spdlog-1.x\include;E:\Program\Vulkan\MyVulkan\VulkanBase\dependency\meshoptimizer\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -146,15 +146,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependency\meshoptimizer\src\indexgenerator.cpp" />
+    <ClCompile Include="..\dependency\meshoptimizer\src\overdrawoptimizer.cpp" />
+    <ClCompile Include="..\dependency\meshoptimizer\src\vcacheoptimizer.cpp" />
+    <ClCompile Include="..\dependency\meshoptimizer\src\vfetchoptimizer.cpp" />
+    <ClCompile Include="..\dependency\stb_image\stb_image.cpp" />
+    <ClCompile Include="..\dependency\tinyObj\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\VulkanImageBase.cpp" />
+    <ClCompile Include="src\VulkanImageSampler.cpp" />
+    <ClCompile Include="src\VulkanSemaphore.cpp" />
     <ClCompile Include="src\AppBase.cpp" />
-    <ClCompile Include="src\Image.cpp" />
-    <ClCompile Include="src\ImageView.cpp" />
+    <ClCompile Include="src\VulkanImage.cpp" />
+    <ClCompile Include="src\VulkanImageView.cpp" />
     <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\ShaderModule.cpp" />
     <ClCompile Include="src\Surface.cpp" />
     <ClCompile Include="src\SwapChainImage.cpp" />
     <ClCompile Include="src\VulkanBuffer.cpp" />
-    <ClCompile Include="src\VulkanBufferBase.cpp" />
     <ClCompile Include="src\VulkanCommandPool.cpp" />
     <ClCompile Include="src\VulKanDebug.cpp" />
     <ClCompile Include="src\VulkanDescriptorSetLayout.cpp" />
@@ -164,18 +174,26 @@
     <ClCompile Include="src\VulkanPipeline.cpp" />
     <ClCompile Include="src\VulkanPipelineLayout.cpp" />
     <ClCompile Include="src\VulkanQueue.cpp" />
-    <ClCompile Include="src\VulkanQueueRequirement.cpp" />
     <ClCompile Include="src\VulkanRenderPass.cpp" />
     <ClCompile Include="src\VulkanSwapChain.cpp" />
+    <ClCompile Include="src\VulkanCommandBuffer.cpp" />
+    <ClCompile Include="src\VulkanDescriptorSet.cpp" />
+    <ClCompile Include="src\VulkanDescriptorPool.cpp" />
+    <ClCompile Include="src\VulkanFence.cpp" />
+    <ClCompile Include="src\UIRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\VulkanImageSampler.h" />
+    <ClInclude Include="src\VulkanSemaphore.h" />
     <ClInclude Include="src\AppBase.h" />
     <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\DeviceObjectBase.h" />
-    <ClInclude Include="src\Image.h" />
-    <ClInclude Include="src\ImageBase.h" />
-    <ClInclude Include="src\ImageView.h" />
+    <ClInclude Include="src\VulkanImage.h" />
+    <ClInclude Include="src\VulkanImageBase.h" />
+    <ClInclude Include="src\VulkanImageView.h" />
     <ClInclude Include="src\Log.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\ShaderModule.h" />
     <ClInclude Include="src\Surface.h" />
     <ClInclude Include="src\SwapChainImage.h" />
@@ -190,9 +208,13 @@
     <ClInclude Include="src\VulkanPipeline.h" />
     <ClInclude Include="src\VulkanPipelineLayout.h" />
     <ClInclude Include="src\VulkanQueue.h" />
-    <ClInclude Include="src\VulkanQueueRequirement.h" />
     <ClInclude Include="src\VulkanRenderPass.h" />
     <ClInclude Include="src\VulkanSwapChain.h" />
+    <ClInclude Include="src\VulkanCommandBuffer.h" />
+    <ClInclude Include="src\VulkanDescriptorSet.h" />
+    <ClInclude Include="src\VulkanDescriptorPool.h" />
+    <ClInclude Include="src\VulkanFence.h" />
+    <ClInclude Include="src\UIRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

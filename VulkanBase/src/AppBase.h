@@ -15,35 +15,40 @@
 #include "VulkanPhysicalDevice.h"
 #include "VulkanSwapChain.h"
 #include "SwapChainImage.h"
-#include "ImageView.h"
+#include "VulkanImage.h"
+#include "VulkanImageView.h"
 #include "VulkanRenderPass.h"
 #include "VulkanQueue.h"
 #include "VulkanCommandPool.h"
 
 class AppBase
 {
-public:
-	GLFWwindow* m_Window{ nullptr };
-	std::shared_ptr<MVK::VulkanInstance> m_Instance;
-	std::shared_ptr<MVK::VulkanPhysicalDevice> m_VulkanPhysicalDevice;
-	std::shared_ptr<MVK::VulkanDevice> m_VulkanDevice;
-	std::shared_ptr<MVK::Surface> m_surface;
-	std::shared_ptr<MVK::VulkanSwapChain> m_swapChain;
-	std::vector<std::shared_ptr<MVK::SwapChainImage>> m_swapchain_images;
-	std::vector<std::shared_ptr<MVK::ImageView>> m_swapchain_image_views;
+protected:
+	GLFWwindow* mWindow{ nullptr };
+	std::shared_ptr<MVK::VulkanInstance> mInstance;
+	std::shared_ptr<MVK::Surface> mSurface;
 
+	std::shared_ptr<MVK::VulkanPhysicalDevice> mVulkanPhysicalDevice;
+	std::shared_ptr<MVK::VulkanDevice> mVulkanDevice;
+	std::shared_ptr<MVK::VulkanSwapChain> mSwapChain;
 
-	VkPhysicalDeviceFeatures m_EnabledFeatures{};
-	std::vector<const char*> m_EnableDeviceExtensions;
-	std::vector<const char*> m_EnabledInstanceExtensions;
-public:
+	std::vector<std::shared_ptr<MVK::SwapChainImage>> mSwapchainImages;
+	std::vector<std::shared_ptr<MVK::VulkanImageView>> mSwapchainImageViews;
+	std::shared_ptr<MVK::VulkanImage> mDepth;
+	std::shared_ptr<MVK::VulkanImageView> mDepthView;
+protected:
 	std::string m_AppName = "Hello";
 	uint32_t m_ApiVersion = VK_MAKE_VERSION(1, 0, 0);
 	bool m_Validation = true;
+	VkPhysicalDeviceFeatures mEnabledFeatures{};
+	std::vector<const char*> mEnableDeviceExtensions;
+	std::vector<const char*> mEnabledInstanceExtensions;
+	VkQueueFlags mRequestQueue = VK_QUEUE_GRAPHICS_BIT;
 public:
 	AppBase();
 	~AppBase();
 	virtual void Initialize();
+	void DrawFrame();
 };
 
 #endif 

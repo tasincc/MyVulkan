@@ -23,22 +23,24 @@ namespace MVK
 	class VulkanSwapChain :public DeviceObjectBase
 	{
 	private:
-		VkSwapchainKHR m_SwapChain = VK_NULL_HANDLE;
-		SwapChainSupportDetails m_SwapChainSupport;
-		std::shared_ptr<VulkanDevice> m_Device;
-		VkFormat m_ImageFormat;
-		VkExtent2D m_Extent;
+		VkSwapchainKHR mSwapchain = VK_NULL_HANDLE;
+		std::shared_ptr<VulkanDevice> mDevice;
+		SwapChainSupportDetails mSwapchainSupport;
+		VkFormat mImageFormat;
+		VkExtent2D mExtent;
 	public:
 		~VulkanSwapChain();
-		static std::shared_ptr<VulkanSwapChain> createSwapChain(GLFWwindow* window, std::shared_ptr<VulkanPhysicalDevice> physcialDevice, std::shared_ptr<Surface> surface, std::shared_ptr<VulkanDevice> device);
-		SwapChainSupportDetails querySwapChainSupport(std::shared_ptr<VulkanPhysicalDevice> physcialDevice, std::shared_ptr<Surface> surface);
+		static std::shared_ptr<VulkanSwapChain> Create(GLFWwindow* window,const std::shared_ptr<VulkanPhysicalDevice>& physcialDevice,const std::shared_ptr<Surface>& surface,const std::shared_ptr<VulkanDevice>& device);
+		VkSwapchainKHR GetHandle() const { return mSwapchain; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const  override { return mDevice; }
+		VkFormat GetImageFormat() const { return mImageFormat; }
+		const VkExtent2D GetExtent() const { return mExtent; }
+		void Present();
+	private:
 		VkSurfaceFormatKHR choseSwapChianFormat();
+		SwapChainSupportDetails querySwapChainSupport(const std::shared_ptr<VulkanPhysicalDevice>& physcialDevice,const std::shared_ptr<Surface>& surface);
 		VkExtent2D choseSwapChianExtent(GLFWwindow* window);
 		VkPresentModeKHR choseSwapChianPresentMode();
-		VkSwapchainKHR GetHandle() const { return m_SwapChain; }
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const  override { return m_Device; }
-		VkFormat GetImageFormat() const { return m_ImageFormat; }
-		const VkExtent2D GetExtent() const { return m_Extent; }
 	};
 }
 

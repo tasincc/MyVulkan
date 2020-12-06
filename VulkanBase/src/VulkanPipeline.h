@@ -13,12 +13,12 @@ namespace MVK
 	class PipelineBase :public DeviceObjectBase
 	{
 	protected:
-		VkPipeline m_pipeline{ nullptr };
-		std::shared_ptr<VulkanPipelineLayout> m_pipeline_layouts_ptr{ nullptr };
+		VkPipeline mPipeline{ nullptr };
+		std::shared_ptr<VulkanPipelineLayout> mPipelineLayoutsPtr{ nullptr };
 	public:
 		~PipelineBase();
-		VkPipeline GetHandle() const { return m_pipeline; }
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return m_pipeline_layouts_ptr->GetDevicePtr(); }
+		VkPipeline GetHandle() const { return mPipeline; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mPipelineLayoutsPtr->GetDevicePtr(); }
 	};
 
 	class VulkanGraphicPipeline :PipelineBase
@@ -26,7 +26,7 @@ namespace MVK
 	private:
 		std::shared_ptr<VulkanRenderPass> m_render_pass_ptr;
 	public:
-		static std::shared_ptr<VulkanGraphicPipeline> CreateGraphicPipeline(const std::shared_ptr<VulkanPipelineLayout>& pipeline_layout, const std::shared_ptr<VulkanRenderPass>& render_pass, const VkGraphicsPipelineCreateInfo& create_info);
+		static std::shared_ptr<VulkanGraphicPipeline> Create(const std::shared_ptr<VulkanPipelineLayout>& pipeline_layout, const std::shared_ptr<VulkanRenderPass>& render_pass, const VkGraphicsPipelineCreateInfo& create_info);
 	};
 
 	class VulkanComputePipeline :PipelineBase

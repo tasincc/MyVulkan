@@ -9,15 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="dependency">
+      <UniqueIdentifier>{c52caf84-9425-47cb-b7e6-73f89ca6a397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependency\tinyObj">
+      <UniqueIdentifier>{c60662ef-6469-46a7-88f8-fbaffb53523c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependency\meshOpti">
+      <UniqueIdentifier>{cead051b-bbd7-476f-8250-655006733f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependency\stbImage">
+      <UniqueIdentifier>{6538b8a1-fa88-4f7d-80b2-169bd7d34ce3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AppBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Image.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImageView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Log.cpp">
@@ -33,9 +39,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\VulkanBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VulkanBufferBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\VulkanCommandPool.cpp">
@@ -65,13 +68,64 @@
     <ClCompile Include="src\VulkanQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\VulkanQueueRequirement.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\VulkanRenderPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\VulkanSwapChain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\meshoptimizer\src\indexgenerator.cpp">
+      <Filter>dependency\meshOpti</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\meshoptimizer\src\overdrawoptimizer.cpp">
+      <Filter>dependency\meshOpti</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\meshoptimizer\src\vcacheoptimizer.cpp">
+      <Filter>dependency\meshOpti</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\meshoptimizer\src\vfetchoptimizer.cpp">
+      <Filter>dependency\meshOpti</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\tinyObj\tiny_obj_loader.cpp">
+      <Filter>dependency\tinyObj</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanCommandBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanDescriptorSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanDescriptorPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanFence.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanSemaphore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependency\stb_image\stb_image.cpp">
+      <Filter>dependency\stbImage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanImageSampler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanImageView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanImageBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanImage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,15 +137,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\DeviceObjectBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImageBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImageView.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Log.h">
@@ -139,13 +184,46 @@
     <ClInclude Include="src\VulkanQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\VulkanQueueRequirement.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\VulkanRenderPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\VulkanSwapChain.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanCommandBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanDescriptorSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanDescriptorPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanFence.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanSemaphore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UIRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanImageBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanImageSampler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanImageView.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

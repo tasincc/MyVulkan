@@ -10,12 +10,12 @@ namespace MVK
 	class VulkanDescriptorSetLayout :public DeviceObjectBase
 	{
 	private:
-		VkDescriptorSetLayout m_descriptor_set_layout{ nullptr };
-		std::shared_ptr<VulkanDevice> m_device;
+		VkDescriptorSetLayout mDescriptorSetLayout{ nullptr };
+		std::shared_ptr<VulkanDevice> mDevice;
 	public:
 		~VulkanDescriptorSetLayout();
-		VkDescriptorSetLayout GetHandle() const { return m_descriptor_set_layout; }
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return m_device; }
+		VkDescriptorSetLayout GetHandle() const { return mDescriptorSetLayout; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevice; }
 		static std::shared_ptr<VulkanDescriptorSetLayout> CreaeteDescriptorSetLayout(const std::shared_ptr<VulkanDevice>& device, const std::vector<VkDescriptorSetLayoutBinding>& layoutBinding);
 	};
 }

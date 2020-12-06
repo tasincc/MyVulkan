@@ -11,19 +11,19 @@ namespace MVK
 	class VulkanPhysicalDevice
 	{
 	private:
-		VkPhysicalDevice m_PhysicalDevice;
-		VkPhysicalDeviceProperties m_PhysicalDeviceProperties;
-		VkPhysicalDeviceMemoryProperties m_PhysicalDeviceMemoryProperties;
-		VkPhysicalDeviceFeatures m_PhysicalDeviceFeatures;
+		VkPhysicalDevice mPhysicalDevice;
+		VkPhysicalDeviceProperties mPhysicalDeviceProperties;
+		VkPhysicalDeviceMemoryProperties mPhysicalDeviceMemoryProperties;
+		VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
 
 		void Initialize(const std::shared_ptr<VulkanInstance> instance, VkPhysicalDevice physicalDevice);
 	public:
 		static std::vector<std::shared_ptr<VulkanPhysicalDevice>> GetAllPhysicalDevice(const std::shared_ptr<VulkanInstance> instance);
 
-		VkPhysicalDevice GetHandle() const { return m_PhysicalDevice; }
-		const VkPhysicalDeviceProperties GetProperties() const { return m_PhysicalDeviceProperties; }
-		const VkPhysicalDeviceMemoryProperties GetMemoryProperties() const { return m_PhysicalDeviceMemoryProperties; }
-		const VkPhysicalDeviceFeatures GetFeatures() const { return m_PhysicalDeviceFeatures; }
+		VkPhysicalDevice GetHandle() const { return mPhysicalDevice; }
+		const VkPhysicalDeviceProperties GetProperties() const { return mPhysicalDeviceProperties; }
+		const VkPhysicalDeviceMemoryProperties GetMemoryProperties() const { return mPhysicalDeviceMemoryProperties; }
+		const VkPhysicalDeviceFeatures GetFeatures() const { return mPhysicalDeviceFeatures; }
 		VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 		VkFormat FindDepthFormat();
 		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags propeyties);

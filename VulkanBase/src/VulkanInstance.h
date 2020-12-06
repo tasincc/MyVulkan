@@ -11,11 +11,11 @@ namespace MVK
 	class VulkanInstance
 	{
 	private:
-		VkInstance m_Instance{ nullptr };
+		VkInstance mInstance{ nullptr };
 	public:
-		static std::shared_ptr<VulkanInstance> createInstance(const char* appName, bool enableValidation = false);
+		static std::shared_ptr<VulkanInstance> Create(const char* appName, bool enableValidation = false);
 		~VulkanInstance();
-		VkInstance GetHandle() const { return m_Instance; }
+		VkInstance GetHandle() const { return mInstance; }
 	};
 }
 

@@ -5,23 +5,23 @@ namespace MVK
 {
 	VulkanCommandPool::~VulkanCommandPool()
 	{
-		if (m_command_pool)
+		if (mCommandPool)
 		{
-			vkDestroyCommandPool(m_graphic_queue_ptr->GetDevicePtr()->GetHandle(), m_command_pool, nullptr);
+			vkDestroyCommandPool(mQueuePtr->GetDevicePtr()->GetHandle(), mCommandPool, nullptr);
 		}
 	}
 
-	std::shared_ptr<VulkanCommandPool> VulkanCommandPool::CreateCommandPool(const std::shared_ptr<VulkanQueue> graphicQueue, VkCommandPoolCreateFlags flag)
+	std::shared_ptr<VulkanCommandPool> VulkanCommandPool::Create(const std::shared_ptr<VulkanQueue>& queue, VkCommandPoolCreateFlags flag /*VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT*/)
 	{
 		std::shared_ptr<VulkanCommandPool> ret = std::make_shared<VulkanCommandPool>();
-		ret->m_graphic_queue_ptr = graphicQueue;
+		ret->mQueuePtr = queue;
 
 		VkCommandPoolCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		createInfo.queueFamilyIndex = graphicQueue->GetFamilyIndex();
-		createInfo.flags = flag; //VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT
+		createInfo.queueFamilyIndex = queue->GetFamilyIndex();
+		createInfo.flags = flag;
 
-		VkResult result = vkCreateCommandPool(graphicQueue->GetDevicePtr()->GetHandle(), &createInfo, nullptr, &ret->m_command_pool);
+		VkResult result = vkCreateCommandPool(queue->GetDevicePtr()->GetHandle(), &createInfo, nullptr, &ret->mCommandPool);
 		if (result != VK_SUCCESS)
 		{
 			CORE_ERROR("failed to create command pool");

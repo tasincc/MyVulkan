@@ -26,11 +26,11 @@ namespace MVK
 
 	void VulkanPhysicalDevice::Initialize(const std::shared_ptr<VulkanInstance> instance, VkPhysicalDevice physicalDevice)
 	{
-		m_PhysicalDevice = physicalDevice;
+		mPhysicalDevice = physicalDevice;
 
-		vkGetPhysicalDeviceProperties(physicalDevice, &m_PhysicalDeviceProperties);
-		vkGetPhysicalDeviceFeatures(physicalDevice, &m_PhysicalDeviceFeatures);
-		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &m_PhysicalDeviceMemoryProperties);
+		vkGetPhysicalDeviceProperties(physicalDevice, &mPhysicalDeviceProperties);
+		vkGetPhysicalDeviceFeatures(physicalDevice, &mPhysicalDeviceFeatures);
+		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &mPhysicalDeviceMemoryProperties);
 	}
 
 	VkFormat VulkanPhysicalDevice::FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
@@ -38,7 +38,7 @@ namespace MVK
 		for (VkFormat format : candidates)
 		{
 			VkFormatProperties props;
-			vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice, format, &props);
+			vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, format, &props);
 			if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
 			{
 				return format;
@@ -61,9 +61,9 @@ namespace MVK
 
 	uint32_t VulkanPhysicalDevice::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags propeyties)
 	{
-		for (uint32_t i = 0; i < m_PhysicalDeviceMemoryProperties.memoryTypeCount; i++)
+		for (uint32_t i = 0; i < mPhysicalDeviceMemoryProperties.memoryTypeCount; i++)
 		{
-			if ((typeFilter & (1 << i)) && (m_PhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & propeyties) == propeyties)
+			if ((typeFilter & (1 << i)) && (mPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & propeyties) == propeyties)
 			{
 				return i;
 			}

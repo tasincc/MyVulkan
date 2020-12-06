@@ -11,13 +11,13 @@ namespace MVK
 	class Surface
 	{
 	private:
-		GLFWwindow* m_Window;
-		std::shared_ptr<VulkanInstance> m_Instance;
-		VkSurfaceKHR m_Surface{ nullptr };
+		GLFWwindow* mWindow;
+		std::shared_ptr<VulkanInstance> mInstance;
+		VkSurfaceKHR mSurface{ nullptr };
 	public:
 		~Surface();
-		static std::shared_ptr<Surface> crateSurface(const std::shared_ptr<VulkanInstance> instance, GLFWwindow* window);
-		VkSurfaceKHR GetHandle() const { return m_Surface; }
+		static std::shared_ptr<Surface> Create(const std::shared_ptr<VulkanInstance> instance, GLFWwindow* window);
+		VkSurfaceKHR GetHandle() const { return mSurface; }
 	};
 }
 #endif

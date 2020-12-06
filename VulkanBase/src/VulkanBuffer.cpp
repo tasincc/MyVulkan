@@ -7,7 +7,7 @@ namespace MVK
 	{
 		std::shared_ptr<VulkanBuffer> ret = std::make_shared<VulkanBuffer>();
 		ret->m_device = device;
-		ret->m_size = size;
+		ret->mSize = size;
 
 		VkBufferCreateInfo buffInfo{};
 		buffInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -15,7 +15,7 @@ namespace MVK
 		buffInfo.usage = usage;
 		buffInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; //default
 
-		VkResult result = vkCreateBuffer(device->GetHandle(), &buffInfo, nullptr, &ret->m_buffer);
+		VkResult result = vkCreateBuffer(device->GetHandle(), &buffInfo, nullptr, &ret->mBuffer);
 		if (result != VK_SUCCESS)
 		{
 			CORE_ERROR("failed to create buffer");
@@ -23,7 +23,7 @@ namespace MVK
 		}
 
 		VkMemoryRequirements memRequire;
-		vkGetBufferMemoryRequirements(device->GetHandle(), ret->m_buffer, &memRequire);
+		vkGetBufferMemoryRequirements(device->GetHandle(), ret->mBuffer, &memRequire);
 
 		VkMemoryAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -37,14 +37,21 @@ namespace MVK
 			exit(EXIT_FAILURE);
 		}
 
-		vkBindBufferMemory(device->GetHandle(), ret->m_buffer, ret->m_memory, 0);
+		vkBindBufferMemory(device->GetHandle(), ret->mBuffer, ret->m_memory, 0);
+
+		return ret;
+	}
+
+	std::shared_ptr<VulkanBuffer> VulkanBuffer::CreateStaging(const std::shared_ptr<VulkanDevice>& device, VkDeviceSize size)
+	{
+		return CreateBuffer(device, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 
 	VulkanBuffer::~VulkanBuffer()
 	{
-		if (m_buffer)
+		if (mBuffer)
 		{
-			vkDestroyBuffer(m_device->GetHandle(), m_buffer, nullptr);
+			vkDestroyBuffer(m_device->GetHandle(), mBuffer, nullptr);
 			vkFreeMemory(m_device->GetHandle(), m_memory, nullptr);
 		}
 	}
@@ -52,7 +59,7 @@ namespace MVK
 	void* VulkanBuffer::Map() const
 	{
 		void* data;
-		vkMapMemory(m_device->GetHandle(), m_memory, 0, m_size, 0, &data);
+		vkMapMemory(m_device->GetHandle(), m_memory, 0, mSize, 0, &data);
 		return data;
 	}
 
@@ -61,10 +68,11 @@ namespace MVK
 		vkUnmapMemory(m_device->GetHandle(), m_memory);
 	}
 
-	template<typename T>
-	void VulkanBuffer::Update(const T& data, uint32_t byte_offset) const
-	{
-		memcpy(Map(), data, (size_t)m_size);
-		Unmap();
-	}
+	//template<typename T>
+	//void VulkanBuffer::Update(const T* begin, const T* end, uint32_t byte_offset) const
+	//{
+	//	//memcpy(Map(), begin, (size_t)begin);
+	//	std::copy(begin, end, (T*)((uint8_t*)Map() + byte_offset));
+	//	Unmap();
+	//}
 }

@@ -11,14 +11,14 @@ namespace MVK
 	class ShaderModule :public DeviceObjectBase
 	{
 	private:
-		VkShaderModule m_shader_module{ nullptr };
-		VkShaderStageFlags m_shader_stage;
-		std::shared_ptr<VulkanDevice> m_device{ nullptr };
+		VkShaderModule mShaderModule{ nullptr };
+		VkShaderStageFlags mShaderStage;
+		std::shared_ptr<VulkanDevice> mDevice{ nullptr };
 	public:
 		~ShaderModule();
-		VkShaderModule& GetHandle() { return m_shader_module; }
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return m_device; }
-		static std::shared_ptr<ShaderModule> CreateShaderModule(const std::shared_ptr<VulkanDevice> device, const char* path, VkShaderStageFlags m_shader_stage);
+		VkShaderModule& GetHandle() { return mShaderModule; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevice; }
+		static std::shared_ptr<ShaderModule> Create(const std::shared_ptr<VulkanDevice> device, const char* path, VkShaderStageFlags m_shader_stage);
 	};
 }
 

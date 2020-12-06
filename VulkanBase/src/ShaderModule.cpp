@@ -6,17 +6,17 @@ namespace MVK
 {
 	ShaderModule::~ShaderModule()
 	{
-		if (m_shader_module)
+		if (mShaderModule)
 		{
-			vkDestroyShaderModule(m_device->GetHandle(), m_shader_module, nullptr);
+			vkDestroyShaderModule(mDevice->GetHandle(), mShaderModule, nullptr);
 		}
 	}
 
-	std::shared_ptr<ShaderModule> ShaderModule::CreateShaderModule(const std::shared_ptr<VulkanDevice> device, const char* path, VkShaderStageFlags m_shader_stage)
+	std::shared_ptr<ShaderModule> ShaderModule::Create(const std::shared_ptr<VulkanDevice> device, const char* path, VkShaderStageFlags m_shader_stage)
 	{
 		std::shared_ptr<ShaderModule> ret = std::make_shared<ShaderModule>();
-		ret->m_device;
-		ret->m_shader_stage = m_shader_stage;
+		ret->mDevice;
+		ret->mShaderStage = m_shader_stage;
 
 		size_t shaderSize;
 		char* shaderCode{ nullptr };

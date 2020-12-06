@@ -6,7 +6,7 @@
 
 namespace MVK
 {
-	std::shared_ptr<VulkanInstance> VulkanInstance::createInstance(const char* appName, bool enableValidation)
+	std::shared_ptr<VulkanInstance> VulkanInstance::Create(const char* appName, bool enableValidation)
 	{
 		std::shared_ptr<VulkanInstance> instance = std::make_shared<VulkanInstance>();
 
@@ -62,7 +62,7 @@ namespace MVK
 				createInfo.ppEnabledLayerNames = kValidationLayers;
 			}
 		}
-		if (vkCreateInstance(&createInfo, nullptr, &instance->m_Instance) != VK_SUCCESS)
+		if (vkCreateInstance(&createInfo, nullptr, &instance->mInstance) != VK_SUCCESS)
 		{
 			CORE_ERROR("failed to create instance");
 			exit(EXIT_FAILURE);
@@ -78,8 +78,7 @@ namespace MVK
 
 	VulkanInstance::~VulkanInstance()
 	{
-
-		MVK::DEBUG::freeDebug(m_Instance);
-		vkDestroyInstance(m_Instance, nullptr);
+		MVK::DEBUG::freeDebug(mInstance);
+		vkDestroyInstance(mInstance, nullptr);
 	}
 }
