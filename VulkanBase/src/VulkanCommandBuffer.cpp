@@ -35,7 +35,7 @@ namespace MVK
 	{
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = flag;
+		//beginInfo.flags = flag;
 
 		return vkBeginCommandBuffer(mCommandBuffer, &beginInfo);
 	}
@@ -69,6 +69,74 @@ namespace MVK
 		}
 
 		return vkQueueSubmit(mCommandPool->GetQueuePtr()->GetHandle(), 1, &submitInfo, fence ? fence->GetHandle() : VK_NULL_HANDLE);
+	}
+
+	void VulkanCommandBuffer::BeginRenderPass(const std::shared_ptr<VulkanRenderPass>& renderPass, const std::shared_ptr<VulkanFramebuffer> frameBuffer, const std::vector<VkClearValue>& clearValues, VkSubpassContents subpassContent)
+	{
+		VkRenderPassBeginInfo beginInfo{};
+		beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		beginInfo.renderPass = renderPass->GetHandle();
+		beginInfo.framebuffer = frameBuffer->GetHandle();
+		beginInfo.renderArea.offset = { 0,0 };
+		beginInfo.renderArea.extent = frameBuffer->GetExtent();
+		beginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+		beginInfo.pClearValues = clearValues.data();
+		vkCmdBeginRenderPass(mCommandBuffer, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+	}
+
+	void VulkanCommandBuffer::EndRenderPass()
+	{
+		vkCmdEndRenderPass(mCommandBuffer);
+	}
+
+	void VulkanCommandBuffer::CmdBindPipeline(const std::shared_ptr<PipelineBase>& pipeline, VkPipelineBindPoint bindPoint)
+	{
+		vkCmdBindPipeline(mCommandBuffer, bindPoint, pipeline->GetHandle());
+	}
+
+	void VulkanCommandBuffer::CmdBindVertexBuffer(const std::vector<std::shared_ptr<VulkanBuffer>>& buffers, VkDeviceSize offset, uint32_t start_slot)
+	{
+		std::vector<VkBuffer> handles(buffers.size());
+		for (uint32_t i = 0; i < static_cast<uint32_t>(buffers.size()); i++)
+		{
+			handles[i] = buffers[i]->GetHandle();
+		}
+		vkCmdBindVertexBuffers(mCommandBuffer, start_slot, static_cast<uint32_t>(handles.size()), handles.data(), &offset);
+	}
+
+	void VulkanCommandBuffer::CmdBindIndexBuffer(const std::shared_ptr<VulkanBuffer>& buffer, VkDeviceSize offset, VkIndexType indexType)
+	{
+		vkCmdBindIndexBuffer(mCommandBuffer, buffer->GetHandle(), offset, indexType);
+	}
+
+	void VulkanCommandBuffer::CmdBindDescriptorSet(VkPipelineBindPoint bindPoint, uint32_t firstSet, const std::shared_ptr<VulkanPipelineLayout>& layout, const std::vector<std::shared_ptr<VulkanDescriptorSet>>& descriptorSets,const std::vector<uint32_t>& offset)
+	{
+		std::vector<VkDescriptorSet> handles(descriptorSets.size());
+		for (uint32_t i = 0; i < static_cast<uint32_t>(descriptorSets.size()); i++)
+		{
+			handles[i] = descriptorSets[i]->GetHandle();
+		}
+		vkCmdBindDescriptorSets(mCommandBuffer, bindPoint, layout->GetHandle(), firstSet, static_cast<uint32_t>(handles.size()), handles.data(),static_cast<uint32_t>(offset.size()), offset.data());
+	}
+
+	void VulkanCommandBuffer::CmdSetViewport(const VkViewport& viewport)
+	{
+		vkCmdSetViewport(mCommandBuffer, 0, 1, &viewport);
+	}
+
+	void VulkanCommandBuffer::CmdSetScissor(const VkRect2D& scissor)
+	{
+		vkCmdSetScissor(mCommandBuffer, 0, 1, &scissor);
+	}
+
+	void VulkanCommandBuffer::CmdDraw(uint32_t vertexCount,uint32_t instanceCount,uint32_t firstVertex,uint32_t firstInstance)
+	{
+		vkCmdDraw(mCommandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
+	}
+
+	void VulkanCommandBuffer::CmdDrawIndexed(uint32_t indexCount,uint32_t instanceCount,uint32_t firstIndex,int32_t vertexOffset,uint32_t firstInstance)
+	{
+		vkCmdDrawIndexed(mCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 	}
 
 	void VulkanCommandBuffer::CmdPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,

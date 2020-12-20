@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{C8E0858A-98F1-4B8D-81D0-A710AF9FB455}</ProjectGuid>
-    <RootNamespace>VulkanBase</RootNamespace>
+    <ProjectGuid>{F3B3EDB8-0605-4D0E-A0F4-ECC673CB2185}</ProjectGuid>
+    <RootNamespace>sceneLoad</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -39,7 +39,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -69,13 +69,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,6 +83,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependency;$(SolutionDir)dependency\spdlog-1.x\include;$(SolutionDir)VulkanBase\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;$(SolutionDir)bin\$(Platform)\$(Configuration)\VulkanBase.lib;%(AdditionalDependencies)%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -93,24 +109,6 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependency;$(SolutionDir)dependency\spdlog-1.x\include;E:\Program\Vulkan\MyVulkan\VulkanBase\dependency\meshoptimizer\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>
-      </OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs;E:\Program\Vulkan\MyVulkan\VulkanBase\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -146,79 +144,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependency\meshoptimizer\src\indexgenerator.cpp" />
-    <ClCompile Include="..\dependency\meshoptimizer\src\overdrawoptimizer.cpp" />
-    <ClCompile Include="..\dependency\meshoptimizer\src\vcacheoptimizer.cpp" />
-    <ClCompile Include="..\dependency\meshoptimizer\src\vfetchoptimizer.cpp" />
-    <ClCompile Include="..\dependency\stb_image\stb_image.cpp" />
-    <ClCompile Include="..\dependency\tinyObj\tiny_obj_loader.cpp" />
-    <ClCompile Include="src\FrameRate.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\VulkanImageBase.cpp" />
-    <ClCompile Include="src\VulkanImageSampler.cpp" />
-    <ClCompile Include="src\VulkanSemaphore.cpp" />
-    <ClCompile Include="src\AppBase.cpp" />
-    <ClCompile Include="src\VulkanImage.cpp" />
-    <ClCompile Include="src\VulkanImageView.cpp" />
-    <ClCompile Include="src\Log.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
-    <ClCompile Include="src\VulkanShaderModule.cpp" />
-    <ClCompile Include="src\Surface.cpp" />
-    <ClCompile Include="src\SwapChainImage.cpp" />
-    <ClCompile Include="src\VulkanBuffer.cpp" />
-    <ClCompile Include="src\VulkanCommandPool.cpp" />
-    <ClCompile Include="src\VulKanDebug.cpp" />
-    <ClCompile Include="src\VulkanDescriptorSetLayout.cpp" />
-    <ClCompile Include="src\VulkanDevice.cpp" />
-    <ClCompile Include="src\VulkanInstance.cpp" />
-    <ClCompile Include="src\VulkanPhysicalDevice.cpp" />
-    <ClCompile Include="src\VulkanPipeline.cpp" />
-    <ClCompile Include="src\VulkanPipelineLayout.cpp" />
-    <ClCompile Include="src\VulkanQueue.cpp" />
-    <ClCompile Include="src\VulkanRenderPass.cpp" />
-    <ClCompile Include="src\VulkanSwapChain.cpp" />
-    <ClCompile Include="src\VulkanCommandBuffer.cpp" />
-    <ClCompile Include="src\VulkanDescriptorSet.cpp" />
-    <ClCompile Include="src\VulkanDescriptorPool.cpp" />
-    <ClCompile Include="src\VulkanFence.cpp" />
-    <ClCompile Include="src\UIRenderer.cpp" />
-    <ClCompile Include="src\VulkanFrameBuffer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="sceneLoad.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\FrameRate.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\VulkanImageSampler.h" />
-    <ClInclude Include="src\VulkanSemaphore.h" />
-    <ClInclude Include="src\AppBase.h" />
-    <ClInclude Include="src\Config.h" />
-    <ClInclude Include="src\DeviceObjectBase.h" />
-    <ClInclude Include="src\VulkanImage.h" />
-    <ClInclude Include="src\VulkanImageBase.h" />
-    <ClInclude Include="src\VulkanImageView.h" />
-    <ClInclude Include="src\Log.h" />
-    <ClInclude Include="src\Scene.h" />
-    <ClInclude Include="src\VulkanShaderModule.h" />
-    <ClInclude Include="src\Surface.h" />
-    <ClInclude Include="src\SwapChainImage.h" />
-    <ClInclude Include="src\VulkanBuffer.h" />
-    <ClInclude Include="src\VulkanBufferBase.h" />
-    <ClInclude Include="src\VulkanCommandPool.h" />
-    <ClInclude Include="src\VulKanDebug.h" />
-    <ClInclude Include="src\VulkanDescriptorSetLayout.h" />
-    <ClInclude Include="src\VulkanDevice.h" />
-    <ClInclude Include="src\VulkanInstance.h" />
-    <ClInclude Include="src\VulkanPhysicalDevice.h" />
-    <ClInclude Include="src\VulkanPipeline.h" />
-    <ClInclude Include="src\VulkanPipelineLayout.h" />
-    <ClInclude Include="src\VulkanQueue.h" />
-    <ClInclude Include="src\VulkanRenderPass.h" />
-    <ClInclude Include="src\VulkanSwapChain.h" />
-    <ClInclude Include="src\VulkanCommandBuffer.h" />
-    <ClInclude Include="src\VulkanDescriptorSet.h" />
-    <ClInclude Include="src\VulkanDescriptorPool.h" />
-    <ClInclude Include="src\VulkanFence.h" />
-    <ClInclude Include="src\UIRenderer.h" />
-    <ClInclude Include="src\VulkanFrameBuffer.h" />
+    <ClInclude Include="sceneLoad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

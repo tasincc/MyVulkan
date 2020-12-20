@@ -11,7 +11,7 @@ namespace MVK
 		}
 	}
 
-	std::shared_ptr<VulkanPipelineLayout> VulkanPipelineLayout::Create(std::shared_ptr<VulkanDevice> device, std::vector<std::shared_ptr<VulkanDescriptorSetLayout>> descriptorlayouts)
+	std::shared_ptr<VulkanPipelineLayout> VulkanPipelineLayout::Create(std::shared_ptr<VulkanDevice> device,const std::vector<std::shared_ptr<VulkanDescriptorSetLayout>>& descriptorlayouts, const std::vector<VkPushConstantRange>& pushConstantRanges)
 	{
 		std::shared_ptr<VulkanPipelineLayout> ret = std::make_shared<VulkanPipelineLayout>();
 		ret->mDevicePtr = device;
@@ -27,6 +27,8 @@ namespace MVK
 		createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		createInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayoutsHandle.size());
 		createInfo.pSetLayouts = descriptorSetLayoutsHandle.data();
+		createInfo.pushConstantRangeCount = static_cast<uint32_t>(pushConstantRanges.size());
+		createInfo.pPushConstantRanges = pushConstantRanges.data();
 
 		VkResult result = vkCreatePipelineLayout(device->GetHandle(), &createInfo, nullptr, &ret->mPipelineLayout);
 		if (result != VK_SUCCESS)

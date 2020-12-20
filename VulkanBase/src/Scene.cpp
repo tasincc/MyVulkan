@@ -190,8 +190,8 @@ void Scene::load_texture(const std::shared_ptr<MVK::VulkanQueue> graphicQueue, c
 			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		texture.mImageView = MVK::VulkanImageView::Create(texture.mImage, VK_IMAGE_VIEW_TYPE_2D);
-		texture.mSampler = MVK::VulkanImageSampler::Create(device, 
-			VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR, 
+		texture.mSampler = MVK::VulkanImageSampler::Create(device,
+			VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR,
 			VK_SAMPLER_ADDRESS_MODE_REPEAT, false, 0, texture.mImage->GetMipLevels());
 
 		//Copy buffer to image
@@ -273,7 +273,7 @@ bool Scene::load_buffer_and_draw_cmd(const std::shared_ptr<MVK::VulkanQueue> gra
 	for (const Mesh& mesh : meshs)
 		indexCount += mesh.mVertices.size();
 	nativeVertices.resize(indexCount);
-	mDrawCmd.resize(indexCount);
+	mDrawCmd.resize(meshs.size());
 	uint32_t offset = 0;
 	for (uint32_t i = 0; i < static_cast<uint32_t>(meshs.size()); i++)
 	{
@@ -342,7 +342,7 @@ bool Scene::load_buffer_and_draw_cmd(const std::shared_ptr<MVK::VulkanQueue> gra
 
 void Scene::create_descriptor(std::shared_ptr<MVK::VulkanDevice> device)
 {
-	VkDescriptorSetLayoutBinding layoutBinding{};
+	/*VkDescriptorSetLayoutBinding layoutBinding{};
 	layoutBinding.binding = 0;
 	layoutBinding.descriptorCount = mTextures.size();
 	layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -373,8 +373,41 @@ void Scene::create_descriptor(std::shared_ptr<MVK::VulkanDevice> device)
 	descriptorWrite.dstArrayElement = 0;
 	descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 
-	vkUpdateDescriptorSets(device->GetHandle(), 1, &descriptorWrite, 0, nullptr);
+	vkUpdateDescriptorSets(device->GetHandle(), 1, &descriptorWrite, 0, nullptr);*/
 
+
+	VkDescriptorSetLayoutBinding layoutBinding{};
+	layoutBinding.binding = 0;
+	layoutBinding.descriptorCount = 1;
+	layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	mDescriptorSetLayout = MVK::VulkanDescriptorSetLayout::CreaeteDescriptorSetLayout(device, { layoutBinding });
+
+	VkDescriptorPoolSize poolSize{};
+	poolSize.descriptorCount = mTextures.size();
+	poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	mDescriptorPool = MVK::VulkanDescriptorPool::Create(device, mTextures.size(), { poolSize });
+
+	for (uint32_t i = 0; i < static_cast<uint32_t>(mTextures.size()); i++)
+	{
+		mTextures[i].mDescriptorSet = MVK::VulkanDescriptorSet::Create(mDescriptorPool, mDescriptorSetLayout);
+
+		std::vector<VkDescriptorImageInfo> imageInfos(1);
+		imageInfos[0].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		imageInfos[0].imageView = mTextures[i].mImageView->GetHandle();
+		imageInfos[0].sampler = mTextures[i].mSampler->GetHandle();
+
+		VkWriteDescriptorSet descriptorWrite{};
+		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrite.pImageInfo = imageInfos.data();
+		descriptorWrite.descriptorCount = imageInfos.size();
+		descriptorWrite.dstSet = mTextures[i].mDescriptorSet->GetHandle();
+		descriptorWrite.dstBinding = 0;
+		descriptorWrite.dstArrayElement = 0;
+		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+
+		vkUpdateDescriptorSets(device->GetHandle(), 1, &descriptorWrite, 0, nullptr);
+	}
 }
 
 bool Scene::Initialize(std::shared_ptr<MVK::VulkanQueue> graphicQueue, const char* file_name)
@@ -418,4 +451,27 @@ std::vector<VkVertexInputAttributeDescription> Scene::GetVertexInputAttributeDes
 	ret[1].format = VK_FORMAT_R32G32_SFLOAT;
 
 	return ret;
+}
+
+VkPushConstantRange Scene::GetConstantRange()const
+{
+	VkPushConstantRange constantRange{};
+	constantRange.size = sizeof(uint32_t);
+	constantRange.offset = 0;
+	constantRange.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	return constantRange;
+}
+
+void Scene::Draw(const std::shared_ptr<MVK::VulkanCommandBuffer>& commandBuffer, const std::shared_ptr<MVK::VulkanGraphicPipeline> pipeline)
+{
+	commandBuffer->CmdBindVertexBuffer({ mVertexBuffer }, 0);
+	commandBuffer->CmdBindIndexBuffer(mIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
+
+	for (uint32_t i = 0; i < static_cast<uint32_t>(mDrawCmd.size()); i++)
+	{
+		if (mDrawCmd[i].mPushConstant.mTextureId1 != UINT32_MAX)
+			commandBuffer->CmdBindDescriptorSet(VK_PIPELINE_BIND_POINT_GRAPHICS, 1, pipeline->GetPipelineLayout(), { mTextures[mDrawCmd[i].mPushConstant.mTextureId1].mDescriptorSet }, {});
+		commandBuffer->CmdDrawIndexed(mDrawCmd[i].mIndexCount, 1, mDrawCmd[i].mFirstIndex, 0, 0);
+	}
+
 }

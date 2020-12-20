@@ -13,7 +13,7 @@ namespace MVK
 
 	std::shared_ptr<VulkanSemaphore> VulkanSemaphore::Create(const std::shared_ptr<VulkanDevice>& device)
 	{
-		std::shared_ptr<VulkanSemaphore> ret = std::shared_ptr<VulkanSemaphore>();
+		std::shared_ptr<VulkanSemaphore> ret = std::make_shared<VulkanSemaphore>();
 		ret->mDevice = device;
 
 		VkSemaphoreCreateInfo creatInfo{};
@@ -28,7 +28,7 @@ namespace MVK
 		return ret;
 	}
 
-	inline VulkanSemaphoreGroup::VulkanSemaphoreGroup(const std::initializer_list <std::shared_ptr<VulkanSemaphore>>& semaphores)
+	VulkanSemaphoreGroup::VulkanSemaphoreGroup(const std::initializer_list <std::shared_ptr<VulkanSemaphore>>& semaphores)
 	{
 		for (const auto& semaphore : semaphores)
 		{
@@ -36,7 +36,7 @@ namespace MVK
 		}
 	}
 
-	inline VulkanSemaphoreGroup::VulkanSemaphoreGroup(const std::vector<std::shared_ptr<VulkanSemaphore>>& semaphores)
+	VulkanSemaphoreGroup::VulkanSemaphoreGroup(const std::vector<std::shared_ptr<VulkanSemaphore>>& semaphores)
 	{
 		for (const auto& semaphore : semaphores)
 		{
@@ -44,7 +44,7 @@ namespace MVK
 		}
 	}
 
-	inline VulkanSemaphoreStageGroup::VulkanSemaphoreStageGroup(const std::vector<std::pair<std::shared_ptr<VulkanSemaphore>, VkPipelineStageFlags>>& semaphores)
+	VulkanSemaphoreStageGroup::VulkanSemaphoreStageGroup(const std::vector<std::pair<std::shared_ptr<VulkanSemaphore>, VkPipelineStageFlags>>& semaphores)
 	{
 		for (const auto& semaphore : semaphores)
 		{
@@ -53,7 +53,7 @@ namespace MVK
 		}
 	}
 
-	inline VulkanSemaphoreStageGroup::VulkanSemaphoreStageGroup(const std::initializer_list<std::pair<std::shared_ptr<VulkanSemaphore>, VkPipelineStageFlags>>& semaphores)
+	VulkanSemaphoreStageGroup::VulkanSemaphoreStageGroup(const std::initializer_list<std::pair<std::shared_ptr<VulkanSemaphore>, VkPipelineStageFlags>>& semaphores)
 	{
 		for (const auto& semaphore : semaphores)
 		{

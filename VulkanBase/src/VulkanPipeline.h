@@ -19,14 +19,19 @@ namespace MVK
 		~PipelineBase();
 		VkPipeline GetHandle() const { return mPipeline; }
 		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mPipelineLayoutsPtr->GetDevicePtr(); }
+		const std::shared_ptr<VulkanPipelineLayout>& GetPipelineLayout() const { return mPipelineLayoutsPtr; }
 	};
 
-	class VulkanGraphicPipeline :PipelineBase
+	class VulkanGraphicPipeline :public PipelineBase
 	{
 	private:
 		std::shared_ptr<VulkanRenderPass> m_render_pass_ptr;
 	public:
 		static std::shared_ptr<VulkanGraphicPipeline> Create(const std::shared_ptr<VulkanPipelineLayout>& pipeline_layout, const std::shared_ptr<VulkanRenderPass>& render_pass, const VkGraphicsPipelineCreateInfo& create_info);
+	
+		static VkPipelineInputAssemblyStateCreateInfo GetPipelineInputAssemblyStateCreateInfo(VkPrimitiveTopology topology, VkPipelineTessellationStateCreateFlags flags, VkBool32 primitiveRestartEnable);
+		static VkPipelineRasterizationStateCreateInfo GetPipelineRasterizationStateCreateInfo(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace);
+		static VkPipelineDepthStencilStateCreateInfo GetPipelineDepthStencilStateCreateInfo(VkBool32 depthTestEnable, VkBool32 depthWriteEnable, VkCompareOp depthCompareOp);
 	};
 
 	class VulkanComputePipeline :PipelineBase

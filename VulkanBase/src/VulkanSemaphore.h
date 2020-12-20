@@ -1,5 +1,5 @@
 #ifndef VULKAN_SEMAPHORE_H
-#define VULKAN_SEMAPHORE_Hs
+#define VULKAN_SEMAPHORE_H
 
 #include "vulkan/vulkan.h"
 #include "DeviceObjectBase.h"
@@ -15,7 +15,7 @@ namespace MVK
 	public:
 		static std::shared_ptr<VulkanSemaphore> Create(const std::shared_ptr<VulkanDevice>& device);
 		~VulkanSemaphore();
-		const std::shared_ptr<VulkanDevice>& GetDevicePtr() { return mDevice; }
+		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevice; };
 		VkSemaphore GetHandle()const { return mSemaphore; }
 	};
 
@@ -25,7 +25,7 @@ namespace MVK
 		std::vector<VkSemaphore> mSemaphores;
 	public:
 		VulkanSemaphoreGroup() = default;
-		explicit VulkanSemaphoreGroup(const std::vector<std::shared_ptr<VulkanSemaphore>>& semaphores);
+		VulkanSemaphoreGroup(const std::vector<std::shared_ptr<VulkanSemaphore>>& semaphores);
 		VulkanSemaphoreGroup(const std::initializer_list<std::shared_ptr<VulkanSemaphore>>& semaphores);
 		uint32_t GetCount() const { return mSemaphores.size(); }
 		const VkSemaphore* GetSemaphorePtr() const { return mSemaphores.data(); }

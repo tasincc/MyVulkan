@@ -26,4 +26,40 @@ namespace MVK
 
 		return ret;
 	}
+
+	VkPipelineInputAssemblyStateCreateInfo VulkanGraphicPipeline::GetPipelineInputAssemblyStateCreateInfo(VkPrimitiveTopology topology, VkPipelineTessellationStateCreateFlags flags, VkBool32 primitiveRestartEnable)
+	{
+		VkPipelineInputAssemblyStateCreateInfo ret{};
+		ret.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+		ret.primitiveRestartEnable = VK_FALSE;
+		ret.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+		return ret;
+	}
+
+	VkPipelineRasterizationStateCreateInfo VulkanGraphicPipeline::GetPipelineRasterizationStateCreateInfo(VkPolygonMode polygonMode,VkCullModeFlags cullMode,VkFrontFace frontFace)
+	{
+		VkPipelineRasterizationStateCreateInfo ret{};
+		ret.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+		ret.polygonMode = polygonMode;
+		ret.lineWidth = 1.0f;
+		ret.cullMode = cullMode;
+		ret.frontFace = frontFace;
+		ret.depthClampEnable = VK_FALSE;
+		ret.depthBiasClamp = VK_FALSE;
+		ret.rasterizerDiscardEnable = VK_FALSE;
+		return ret;
+	}
+
+	VkPipelineDepthStencilStateCreateInfo VulkanGraphicPipeline::GetPipelineDepthStencilStateCreateInfo(VkBool32 depthTestEnable,VkBool32 depthWriteEnable,VkCompareOp depthCompareOp)
+	{
+		VkPipelineDepthStencilStateCreateInfo ret{};
+		ret.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+		ret.depthTestEnable = depthTestEnable;
+		ret.depthWriteEnable = depthWriteEnable;
+		ret.depthCompareOp = depthCompareOp;
+		ret.back.compareOp = VK_COMPARE_OP_ALWAYS;
+		ret.depthBoundsTestEnable = VK_FALSE;
+		ret.stencilTestEnable = VK_FALSE;
+		return ret;
+	}
 }

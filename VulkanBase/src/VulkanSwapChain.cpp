@@ -1,6 +1,7 @@
 #include "VulkanSwapChain.h"
 #include "Config.h"
 #include <algorithm>
+#include "Log.h"
 
 namespace MVK
 {
@@ -127,5 +128,23 @@ namespace MVK
 	VulkanSwapChain::~VulkanSwapChain()
 	{
 		vkDestroySwapchainKHR(mDevice->GetHandle(), mSwapchain, nullptr);
+	}
+
+	VkResult VulkanSwapChain::AcquireNextImage(uint32_t* frameIndex, const std::shared_ptr<VulkanSemaphore>& semaphore, const std::shared_ptr<VulkanFence>& fence)
+	{
+		return vkAcquireNextImageKHR(GetDevicePtr()->GetHandle(), mSwapchain, UINT32_MAX, semaphore ? semaphore->GetHandle() : VK_NULL_HANDLE, fence ? fence->GetHandle() : VK_NULL_HANDLE, frameIndex);
+	}
+
+	VkResult VulkanSwapChain::Present(uint32_t currentFrame, const std::shared_ptr<MVK::VulkanPresentQueue>& presentQueue, const VulkanSemaphoreGroup& semaphoreGroup)
+	{
+		VkPresentInfoKHR presentInfo{};
+		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		presentInfo.pImageIndices = &currentFrame;
+		presentInfo.pSwapchains = &mSwapchain;
+		presentInfo.swapchainCount = 1;
+		presentInfo.waitSemaphoreCount = semaphoreGroup.GetCount();
+		presentInfo.pWaitSemaphores = semaphoreGroup.GetSemaphorePtr();
+
+		return vkQueuePresentKHR(presentQueue->GetHandle(), &presentInfo);
 	}
 }

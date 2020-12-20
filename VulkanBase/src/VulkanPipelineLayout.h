@@ -19,7 +19,7 @@ namespace MVK
 		~VulkanPipelineLayout();
 		VkPipelineLayout GetHandle() const { return mPipelineLayout; }
 		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mDevicePtr; }
-		static std::shared_ptr<VulkanPipelineLayout> Create(std::shared_ptr<VulkanDevice> device, std::vector<std::shared_ptr<VulkanDescriptorSetLayout>> descriptorlayouts);
+		static std::shared_ptr<VulkanPipelineLayout> Create(std::shared_ptr<VulkanDevice> device,const std::vector<std::shared_ptr<VulkanDescriptorSetLayout>>& descriptorlayouts,const std::vector<VkPushConstantRange>& pushConstantRanges);
 	};
 }
 

@@ -8,7 +8,10 @@
 #include "VulkanPhysicalDevice.h"
 #include "VulkanDevice.h"
 #include "Surface.h"
+#include "VulkanSemaphore.h"
+#include "VulkanFence.h"
 #include "DeviceObjectBase.h"
+#include "VulkanQueue.h"
 #include "GLFW/glfw3.h"
 
 namespace MVK
@@ -35,7 +38,8 @@ namespace MVK
 		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const  override { return mDevice; }
 		VkFormat GetImageFormat() const { return mImageFormat; }
 		const VkExtent2D GetExtent() const { return mExtent; }
-		void Present();
+		VkResult AcquireNextImage(uint32_t* frameIndex,const std::shared_ptr<VulkanSemaphore>& semaphore,const std::shared_ptr<VulkanFence>& fence);
+		VkResult Present(uint32_t currentFrame,const std::shared_ptr<VulkanPresentQueue>& presentQueue ,const VulkanSemaphoreGroup& semaphoreGroup);
 	private:
 		VkSurfaceFormatKHR choseSwapChianFormat();
 		SwapChainSupportDetails querySwapChainSupport(const std::shared_ptr<VulkanPhysicalDevice>& physcialDevice,const std::shared_ptr<Surface>& surface);

@@ -22,6 +22,7 @@ namespace MVK
 		~VulkanFramebuffer();
 		const std::shared_ptr<VulkanDevice>& GetDevicePtr() const { return mRenderpass->GetDevicePtr(); }
 		VkFramebuffer GetHandle() const { return mFramebuffer; }
+		VkExtent2D GetExtent() const { return mExtent; }
 	};
 }
 

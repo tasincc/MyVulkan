@@ -10,6 +10,7 @@
 #include "VulkanDescriptorSetLayout.h"
 #include "VulkanDescriptorPool.h"
 #include "VulkanDescriptorSet.h"
+#include "VulkanCommandBuffer.h"
 
 #include "glm/glm.hpp"
 
@@ -40,6 +41,7 @@ private:
 		std::shared_ptr<MVK::VulkanImage> mImage;
 		std::shared_ptr<MVK::VulkanImageView> mImageView;
 		std::shared_ptr<MVK::VulkanImageSampler> mSampler;
+		std::shared_ptr<MVK::VulkanDescriptorSet> mDescriptorSet;
 	};
 
 	std::shared_ptr<MVK::VulkanBuffer> mVertexBuffer;
@@ -49,7 +51,7 @@ private:
 
 	std::shared_ptr<MVK::VulkanDescriptorSetLayout> mDescriptorSetLayout;
 	std::shared_ptr<MVK::VulkanDescriptorPool> mDescriptorPool;
-	std::shared_ptr<MVK::VulkanDescriptorSet> mDescriptorSet;
+	//std::shared_ptr<MVK::VulkanDescriptorSet> mDescriptorSet;
 
 
 	static std::string get_base_dir(const char* filename);
@@ -60,9 +62,11 @@ private:
 public:
 	bool Initialize(std::shared_ptr<MVK::VulkanQueue> queuem, const char* filename);
 	const std::shared_ptr<MVK::VulkanDescriptorSetLayout>& GetDescriptorSetLayout() const { return mDescriptorSetLayout; }
-	const std::shared_ptr<MVK::VulkanDescriptorSet>& GetDescriptorSet() const { return mDescriptorSet; }
+	//const std::shared_ptr<MVK::VulkanDescriptorSet>& GetDescriptorSet() const { return mDescriptorSet; }
 	std::vector<VkVertexInputBindingDescription> GetVertexInputBindingDescription() const;
 	std::vector<VkVertexInputAttributeDescription> GetVertexInputAttributeDescription() const;
+	VkPushConstantRange GetConstantRange() const;
+	void Draw(const std::shared_ptr<MVK::VulkanCommandBuffer>& commandBuffer, const std::shared_ptr<MVK::VulkanGraphicPipeline> pipeline);
 };
 
 #endif

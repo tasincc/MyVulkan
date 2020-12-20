@@ -1,4 +1,4 @@
-#include "DeferredShade.h"
+#include "sceneLoad.h"
 #include "VulkanSemaphore.h"
 
 Application::Application()
@@ -22,9 +22,9 @@ void Application::Initialize()
 
 	mCommandPool = MVK::VulkanCommandPool::Create(mGraphicQueue, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
 
-	mScene.Initialize(mGraphicQueue, "C:/Users/41132/Desktop/San_Miguel/san-miguel-low-poly.obj");
+	//mScene.Initialize(mGraphicQueue, "C:/Users/41132/Desktop/San_Miguel/san-miguel-low-poly.obj");
 	//mScene.Initialize(mGraphicQueue, "C://Users//41132//Desktop//Opengl//Learn//resources//objects//sponza//sponza.obj");
-	//mScene.Initialize(mGraphicQueue, "C://Users//41132//Desktop//Opengl//Learn//resources//objects//rock//rock.obj");
+	mScene.Initialize(mGraphicQueue, "C://Users//41132//Desktop//Opengl//Learn//resources//objects//rock//rock.obj");
 
 	//create uniform buffer
 	mUniformBuffers.resize(mSwapchainImageViews.size());

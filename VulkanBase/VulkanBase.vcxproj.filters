@@ -131,6 +131,9 @@
     <ClCompile Include="src\VulkanFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\FrameRate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AppBase.h">
@@ -230,6 +233,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\VulkanFrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameRate.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
